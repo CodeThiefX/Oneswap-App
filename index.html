@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OneSwap</title>
+  <title>OneSwap | APP</title>
+  <link rel="canonical" href="index.html">
   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/style.css" rel="stylesheet">
 </head>
+
 <body>
-    <div class="bg-star-bg">
-        <canvas id="stars"></canvas>
+  <div class="bg-star-bg">
+    <canvas id="stars"></canvas>
+  </div>
+  <div class="preloader">
+    <div class="preloader-content">
+      <h1 class="tracking-in-expand-fwd" style="font-size: 50px;">OneSwap</h1>
     </div>
-    <div class="preloader">
-      <div class="preloader-content">
-        <h1 class="tracking-in-expand-fwd" style="font-size: 50px;">OneSwap</h1>
-      </div>
-    </div>
+  </div>
   <div class="main-content col-12" style="padding:0px;">
     <nav class="navbar navbar-expand-lg navbar-color">
       <div class="container">
         <a class="navbar-brand" href="#" style="color: white;">OneSwap</a>
       </div>
     </nav>
-    <div class="col-12 p-4">
-      <div class="col-12">
-          <iframe width="100%" height="600px" src="https://app.uniswap.org/" style="border-radius: 10px;" class="card"></iframe>
+    <div class="col-12 row" style="margin:0px; padding:0px;">
+      <div class="col-12 col-lg-6 p-4" style="margin:0px; padding:0px;">
+        <iframe width="100%" height="600px" src="https://app.uniswap.org/#/swap" class="card"
+          style="border-radius:20px;"></iframe>
+      </div>
+      <div class="col-12 col-lg-6 p-4" style="margin:0px; padding:0px;">
+        <iframe id="dextools-widget" title="DEXTools Trading Chart" width="100%" height="600px" class="card"
+          style="border-radius:20px;"
+          src="https://www.dextools.io/widget-chart/en/ether/pe-light/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640?theme=light&chartType=2&chartResolution=30&drawingToolbars=true"></iframe>
       </div>
     </div>
-  
-  
-    <div class="col-12 p-4 container mx-auto" style="color: white; display: flex; align-items: center; justify-content: center;flex-direction: column;">
-      <div id="mempool-data" class="table-container" style="width:90%"></div>
+
+
+    <div class="col-12 p-4 container mx-auto"
+      style="color: white; display: flex; align-items: center; justify-content: center;flex-direction: column;">
+      <div id="loading-message">Fetching Data.....</div>
+      <div id="mempool-data" class="table-container" style="display: none;"></div>
       <!-- Navigation buttons for pagination -->
       <div class="col-12" style="display: flex; align-items: center; justify-content: center;gap:10px;padding:20px;">
         <button id="prev-button" class="previous-button">Previous</button>
@@ -38,15 +49,23 @@
         <button id="next-button" class="next-button">Next</button>
       </div>
     </div>
+
+    <div class="col-12 p-4 container mx-auto"
+      style="color: white; display: flex; align-items: center; justify-content: center;flex-direction: column;">
+      <div class="telegram col-12" style="border-radius: 20px;">
+        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-discussion="oneswapD"
+          data-comments-limit="5" data-colorful="1"></script>
+      </div>
+    </div>
   </div>
   <script src="assets/ThreeD.js"></script>
 
-    <!-- Include web3.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="assets/script.js"></script>
+  <!-- Include web3.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+  <script src="assets/script.js"></script>
 
 
-  
+
 
 
   <script>
@@ -67,52 +86,52 @@
 
     // Function to create a new star
     function createStar() {
-    const x = Math.random() * canvas.width
-    const y = Math.random() * canvas.height
-    const vx = (Math.random() - 0.5) * 0.1
-    const vy = (Math.random() - 0.5) * 0.1
+      const x = Math.random() * canvas.width
+      const y = Math.random() * canvas.height
+      const vx = (Math.random() - 0.5) * 0.1
+      const vy = (Math.random() - 0.5) * 0.1
 
-    stars.push({ x, y, vx, vy })
+      stars.push({ x, y, vx, vy })
     }
 
     // Function to update the position of a star
     function updateStar(star) {
-    star.x += star.vx
-    star.y += star.vy
+      star.x += star.vx
+      star.y += star.vy
 
-    // If the star goes off the canvas, reset its position
-    if (star.x < 0 || star.x > canvas.width || star.y < 0 || star.y > canvas.height) {
+      // If the star goes off the canvas, reset its position
+      if (star.x < 0 || star.x > canvas.width || star.y < 0 || star.y > canvas.height) {
         star.x = Math.random() * canvas.width
         star.y = Math.random() * canvas.height
-    }
+      }
     }
 
     // Function to draw a star on the canvas
     function drawStar(star) {
-    ctx.beginPath()
-    ctx.arc(star.x, star.y, starRadius, 0, Math.PI * 2)
-    ctx.fillStyle = starColor
-    ctx.fill()
+      ctx.beginPath()
+      ctx.arc(star.x, star.y, starRadius, 0, Math.PI * 2)
+      ctx.fillStyle = starColor
+      ctx.fill()
     }
 
     // Create the initial stars
     for (let i = 0; i < numStars; i++) {
-    createStar()
+      createStar()
     }
 
     // Animation loop
     function animate() {
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    // Update and draw each star
-    for (const star of stars) {
+      // Update and draw each star
+      for (const star of stars) {
         updateStar(star)
         drawStar(star)
-    }
+      }
 
-    // Request the next frame of the animation
-    requestAnimationFrame(animate)
+      // Request the next frame of the animation
+      requestAnimationFrame(animate)
     }
 
     // Start the animation
@@ -121,27 +140,28 @@
   </script>
 
   <!-- Add this just before the closing </body> tag -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const preloader = document.querySelector('.preloader');
-    const mainContent = document.querySelector('.main-content');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const preloader = document.querySelector('.preloader');
+      const mainContent = document.querySelector('.main-content');
 
-    // Function to hide the preloader and show the main content
-    function showMainContent() {
-      preloader.style.display = 'none';
-      mainContent.classList.add('loaded');
-    }
+      // Function to hide the preloader and show the main content
+      function showMainContent() {
+        preloader.style.display = 'none';
+        mainContent.classList.add('loaded');
+      }
 
-    // Show the main content after 2 seconds (regardless of whether the page is fully loaded)
-    setTimeout(showMainContent, 2000);
+      // Show the main content after 2 seconds (regardless of whether the page is fully loaded)
+      setTimeout(showMainContent, 2000);
 
-    // Check if the page has fully loaded, if it has, cancel the timeout and show the main content
-    window.addEventListener('load', function() {
-      clearTimeout(showMainContent);
-      showMainContent();
+      // Check if the page has fully loaded, if it has, cancel the timeout and show the main content
+      window.addEventListener('load', function () {
+        clearTimeout(showMainContent);
+        showMainContent();
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
